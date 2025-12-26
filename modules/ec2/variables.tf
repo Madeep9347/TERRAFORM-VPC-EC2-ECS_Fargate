@@ -20,3 +20,8 @@ variable "key_name" {
 variable "ubuntu_ami_id" {
   description = "Ubuntu AMI ID"
 }
+##ecs sg
+variable "ecs_backend_sg_id" {
+  description = "Security group ID of ECS backend service"
+  type        = string
+}

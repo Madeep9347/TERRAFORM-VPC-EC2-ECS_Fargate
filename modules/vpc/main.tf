@@ -16,7 +16,7 @@ data "aws_availability_zones" "available" {}
 
 # Public Subnets (2 public subnets, in different AZs, with /24 CIDR)
 resource "aws_subnet" "public_subnets" {
-  count = 2
+  count = 3
   vpc_id = aws_vpc.my_vpc.id
   cidr_block = cidrsubnet(var.vpc_cidr, 8, count.index)
   map_public_ip_on_launch = true
@@ -26,22 +26,12 @@ resource "aws_subnet" "public_subnets" {
     Name = "public_subnet_${count.index + 1}"
   }
 }
-resource "aws_subnet" "public_subnet_3" {
-  vpc_id                  = aws_vpc.my_vpc.id
-  cidr_block              = "10.0.34.0/24"   # choose unused CIDR
-  map_public_ip_on_launch = true
-  availability_zone       = data.aws_availability_zones.available.names[2]
 
-  tags = {
-    Name = "public_subnet_3"
-  }
-}
-
-# Private Subnets (2 private subnets, in different AZs, with /24 CIDR)
+# Private Subnets (3 private subnets, in different AZs, with /24 CIDR)
 resource "aws_subnet" "private_subnets" {
   count = 3
   vpc_id = aws_vpc.my_vpc.id
-  cidr_block = cidrsubnet(var.vpc_cidr, 8, count.index + 2)
+  cidr_block = cidrsubnet(var.vpc_cidr, 8, count.index + 3)
   availability_zone = data.aws_availability_zones.available.names[count.index]
 
   tags = {
@@ -88,10 +78,7 @@ resource "aws_route_table_association" "public_rt_assoc" {
   subnet_id = aws_subnet.public_subnets[count.index].id
   route_table_id = aws_route_table.public_rt.id
 }
-resource "aws_route_table_association" "public_rt_assoc_3" {
-  subnet_id      = aws_subnet.public_subnet_3.id
-  route_table_id = aws_route_table.public_rt.id
-}
+
 
 
 resource "aws_route_table" "private_rt" {

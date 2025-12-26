@@ -41,4 +41,5 @@ module "ec2" {
 
   key_name      = "heliosolutions"
   ubuntu_ami_id = "ami-02b8269d5e85954ef"
+  ecs_backend_sg_id = module.ecs.backend_sg_id
 }

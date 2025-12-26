@@ -17,12 +17,6 @@ resource "aws_security_group" "frontend_sg" {
     security_groups = [aws_security_group.bastion_sg.id]
   }
 
-  ingress {
-    from_port   = 5000
-    to_port     = 5000
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   egress {
     from_port   = 0
@@ -75,7 +69,7 @@ resource "aws_security_group" "database_sg" {
     from_port       = 27017
     to_port         = 27017
     protocol        = "tcp"
-    security_groups = [aws_security_group.backend_sg.id]
+    security_groups = [aws_security_group.backend_sg.id, var.ecs_backend_sg_id]
   }
 
 
@@ -84,7 +78,7 @@ resource "aws_security_group" "database_sg" {
     from_port       = 3306
     to_port         = 3306
     protocol        = "tcp"
-    security_groups = [aws_security_group.backend_sg.id]
+    security_groups = [aws_security_group.backend_sg.id, var.ecs_backend_sg_id]
   }
 
 
